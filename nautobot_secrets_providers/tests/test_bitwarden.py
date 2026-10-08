@@ -102,7 +102,7 @@ class BitwardenSecretsManagerSecretsProviderTestCase(SecretsProviderTestCase):
     def test_external_integration_does_not_exist(self):
         """Raise an error when the referenced External Integration doesn't exist."""
         self.secret.parameters["external_integration"] = "missing"
-        self.secret.validated_save()
+        self.secret.save()
 
         with self.assertRaises(exceptions.SecretParametersError):
             self.provider.get_value_for_secret(self.secret)
@@ -128,7 +128,7 @@ class BitwardenSecretsManagerSecretsProviderTestCase(SecretsProviderTestCase):
         """Refuse an access token secret that is itself stored in Bitwarden."""
         self.token_secret.provider = self.provider.slug
         self.token_secret.parameters = {"external_integration": self.integration.name, "secret_id": self.secret_id}
-        self.token_secret.validated_save()
+        self.token_secret.save()
 
         with self.assertRaises(exceptions.SecretProviderError) as err:
             self.provider.get_value_for_secret(self.secret)
